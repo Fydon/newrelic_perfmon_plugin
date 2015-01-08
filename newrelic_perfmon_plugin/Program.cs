@@ -19,6 +19,11 @@ namespace newrelic_perfmon_plugin
                     sc.WhenStarted( s => s.Start() );
                     sc.WhenStopped( s => s.Stop() );
                 } );
+                x.EnableServiceRecovery( src =>
+                {
+                    src.RestartService( delayInMinutes: 1 ); // On the first service failure, reset service after a minute
+                    src.SetResetPeriod( days: 0 ); // Reset failure count after every failure
+                } );
                 x.SetServiceName( "newrelic_perfmon_plugin" );
                 x.SetDisplayName( "NewRelic Windows Perfmon Plugin" );
                 x.SetDescription( "Sends Perfmon Metrics to NewRelic Platform" );
