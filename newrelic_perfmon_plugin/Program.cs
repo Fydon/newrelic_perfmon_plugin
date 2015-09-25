@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using NewRelic.Platform.Sdk;
-using NewRelic.Platform.Sdk.Utils;
+using NLog;
 using Topshelf;
 
 namespace newrelic_perfmon_plugin
@@ -27,8 +27,9 @@ namespace newrelic_perfmon_plugin
                 x.SetServiceName( "newrelic_perfmon_plugin" );
                 x.SetDisplayName( "NewRelic Windows Perfmon Plugin" );
                 x.SetDescription( "Sends Perfmon Metrics to NewRelic Platform" );
-                x.StartAutomatically();
-                x.RunAsPrompt();
+                x.StartAutomaticallyDelayed();
+                x.RunAsLocalSystem();
+                x.UseNLog();
             } );
         }
     }
@@ -38,7 +39,7 @@ namespace newrelic_perfmon_plugin
         Runner _runner;
         public Thread thread { get; set; }
 
-        private static Logger logger = Logger.GetLogger( "newrelic_perfmon_plugin" );
+        private static Logger logger = LogManager.GetLogger( "newrelic_perfmon_plugin" );
 
         public PluginService()
         {
